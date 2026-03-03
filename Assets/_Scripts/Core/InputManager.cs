@@ -1,38 +1,43 @@
 using UnityEngine;
 using Scripts.Core;
 
-namespace Scripts.Managers
+namespace Scripts.Input
 {
     public class InputManager : MonoBehaviour
     {
-        [Header("Layer Masks")]
-        [SerializeField] private LayerMask unitLayer;
+        private Camera cam;
+        [SerializeField] private LayerMask unitMask;
 
-        private ISelectable currentSelectedUnit;
+        private Unit _selectedUnit;
 
-        private void Update()
+        void Awake()
         {
-            if (Input.GetMouseButtonDown(0))
+            cam = Camera.main;
+        }
+
+        void Update()
+        {
+            if (!UnityEngine.Input.GetMouseButtonDown(0)) return;
+
+            Ray ray = cam.ScreenPointToRay(UnityEngine.Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 500f, unitMask))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, unitLayer))
-                {
-                    ISelectable clickedUnit = hit.collider.GetComponent<ISelectable>();
-
-                    if (clickedUnit != null)
-                    {
-                        if (currentSelectedUnit != null && currentSelectedUnit != clickedUnit)
-                        {
-                            Debug.Log("a");
-                            currentSelectedUnit.Deselect();
-                        }
-
-                        currentSelectedUnit = clickedUnit;
-                        currentSelectedUnit.Select();
-                    }
-                }
+                var unit = hit.collider.GetComponentInParent<Unit>();
+                if (unit != null)
+                    SelectUnit(unit);
             }
+        }
+
+        private void SelectUnit(Unit unit)
+        {
+            if (_selectedUnit == unit) return;
+
+            if (_selectedUnit != null)
+                _selectedUnit.Deselect();
+
+            _selectedUnit = unit;
+            _selectedUnit.Select();
         }
     }
 }
