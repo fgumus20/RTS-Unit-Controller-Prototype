@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c27fb9bc37f514ea5f4403c307ee2a, type: 3}
   m_Name: HeavyTank
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  moveSpeed: 0
-  attackDamage: 0
-  attackRange: 0
-  fireRate: 0
+  maxHealth: 900
+  moveSpeed: 4
+  attackDamage: 20
+  attackRange: 30
+  fireRate: 1.5
