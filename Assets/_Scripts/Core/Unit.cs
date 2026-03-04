@@ -21,6 +21,7 @@ namespace Scripts.Core
 
         private void Start()
         {
+            health = unitData.maxHealth;
             Deselect();
         }
 
@@ -52,11 +53,12 @@ namespace Scripts.Core
 
         private void HandleMovement()
         {
+           
             Vector3 direction = (moveDestination - transform.position).normalized;
             if (direction != Vector3.zero)
             {
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 10f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * unitData.rotationSpeed);
             }
 
             transform.position = Vector3.MoveTowards(transform.position, moveDestination, unitData.moveSpeed * Time.deltaTime);
