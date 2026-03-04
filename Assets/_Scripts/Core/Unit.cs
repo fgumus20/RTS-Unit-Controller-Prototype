@@ -4,7 +4,7 @@ using Scripts.Data;
 namespace Scripts.Core
 
 {
-    public enum UnitState { Idle, Moving }
+    public enum UnitState { Idle, Moving, Chasing }
 
     public class Unit : CombatObject, ISelectable
     {
@@ -16,8 +16,10 @@ namespace Scripts.Core
         [SerializeField] private Material selectedMaterial;
         [SerializeField] private Material unselectedMaterial;
 
-        private UnitState currentState = UnitState.Idle;
-        private Vector3 moveDestination;
+        private UnitState _currentState = UnitState.Idle;
+        private Vector3 _moveDestination;
+        private CombatObject _currentTarget;
+
 
         private void Start()
         {
@@ -29,9 +31,14 @@ namespace Scripts.Core
         {
             if (IsDead) return;
 
-            if (currentState == UnitState.Moving)
+            switch (_currentState)
             {
-                HandleMovement();
+                case UnitState.Moving:
+                    HandleMovement();
+                    break;
+                case UnitState.Chasing:
+                    HandleChasing();
+                    break;
             }
         }
 
@@ -47,26 +54,60 @@ namespace Scripts.Core
 
         public void MoveTo(Vector3 destination)
         {
-            moveDestination = new Vector3(destination.x, transform.position.y, destination.z);
-            currentState = UnitState.Moving;
+            _currentTarget = null;
+            _moveDestination = new Vector3(destination.x, transform.position.y, destination.z);
+            _currentState = UnitState.Moving;
+        }
+
+        public void SetTarget(CombatObject target)
+        {
+            _currentTarget = target;
+            _currentState = UnitState.Chasing;
         }
 
         private void HandleMovement()
         {
-           
-            Vector3 direction = (moveDestination - transform.position).normalized;
+
+            MoveTowardsPosition(_moveDestination);
+
+            if (Vector3.Distance(transform.position, _moveDestination) < 0.1f)
+            {
+                _currentState = UnitState.Idle;
+            }
+        }
+
+        private void HandleChasing()
+        {
+            if (_currentTarget == null || _currentTarget.IsDead)
+            {
+                _currentState = UnitState.Idle;
+                return;
+            }
+
+            Vector3 targetPos = new Vector3(_currentTarget.transform.position.x, transform.position.y, _currentTarget.transform.position.z);
+            float distance = Vector3.Distance(transform.position, targetPos);
+
+            if (distance <= unitData.attackRange)
+            {
+                // Attack state
+                _currentState = UnitState.Idle;
+            }
+            else
+            {
+                MoveTowardsPosition(targetPos);
+            }
+        }
+
+        private void MoveTowardsPosition(Vector3 targetPosition)
+        {
+            Vector3 direction = (targetPosition - transform.position).normalized;
             if (direction != Vector3.zero)
             {
                 Quaternion lookRotation = Quaternion.LookRotation(direction);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * unitData.rotationSpeed);
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, moveDestination, unitData.moveSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, moveDestination) < 0.1f)
-            {
-                currentState = UnitState.Idle;
-            }
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, unitData.moveSpeed * Time.deltaTime);
         }
     }
 }
