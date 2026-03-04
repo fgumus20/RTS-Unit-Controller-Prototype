@@ -7,6 +7,7 @@ namespace Scripts.Input
     {
         private Camera cam;
         [SerializeField] private LayerMask unitMask;
+        [SerializeField] private LayerMask groundMask;
 
         private Unit _selectedUnit;
 
@@ -25,7 +26,18 @@ namespace Scripts.Input
             {
                 var unit = hit.collider.GetComponentInParent<Unit>();
                 if (unit != null)
+                {
                     SelectUnit(unit);
+                    return;
+                }
+            }
+
+            if (_selectedUnit != null)
+            {
+                if (Physics.Raycast(ray, out RaycastHit groundHit, 500f, groundMask))
+                {
+                    _selectedUnit.MoveTo(groundHit.point);
+                }
             }
         }
 

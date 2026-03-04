@@ -7,6 +7,7 @@ namespace Scripts.Data
     {
         public int maxHealth;
         public float moveSpeed;
+        public float rotationSpeed;
         public int attackDamage;
         public float attackRange;
         public float fireRate;
