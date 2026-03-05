@@ -4,12 +4,9 @@ namespace Scripts.Core
 {
     public class EnemyBuilding : CombatObject
     {
-        [SerializeField] private int maxHealth = 500;
+        [SerializeField] private int _maxHealth = 500;
 
-        private void Start()
-        {
-            health = maxHealth;
-        }
+        protected override int GetMaxHealth() => _maxHealth;
 
         protected override void Die()
         {
