@@ -48,7 +48,6 @@ namespace Scripts.Input
 
                 if (Physics.Raycast(ray, out RaycastHit groundHit, 500f, _groundMask))
                 {
-                    Debug.Log("a");
                     _selectedUnit.MoveTo(groundHit.point);
                 }
             }
