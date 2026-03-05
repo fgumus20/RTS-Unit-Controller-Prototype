@@ -27,9 +27,9 @@ namespace Scripts.Core
         private float _nextFireTime;
 
 
-        private void Start()
+        protected override void Start()
         {
-            health = _unitData.maxHealth;
+            base.Start();
             Deselect();
         }
 
@@ -50,6 +50,8 @@ namespace Scripts.Core
                     break;
             }
         }
+        protected override int GetMaxHealth() => _unitData.maxHealth;
+
 
         public void Select()
         {
