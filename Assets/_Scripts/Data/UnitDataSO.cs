@@ -11,5 +11,6 @@ namespace Scripts.Data
         public int attackDamage;
         public float attackRange;
         public float fireRate;
+        public float bulletSpeed;
     }
 }
