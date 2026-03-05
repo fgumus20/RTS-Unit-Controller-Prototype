@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class Billboard : MonoBehaviour
+namespace Scripts.UI
 {
-    private Transform camTransform;
-
-    void Start()
+    public class Billboard : MonoBehaviour
     {
-        camTransform = Camera.main.transform;
-    }
+        private Transform camTransform;
 
-    void LateUpdate()
-    {
-        transform.rotation = camTransform.rotation;
+        void Start()
+        {
+            camTransform = Camera.main.transform;
+        }
+
+        void LateUpdate()
+        {
+            transform.rotation = camTransform.rotation;
+        }
     }
 }
