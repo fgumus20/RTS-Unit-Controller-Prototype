@@ -5,24 +5,25 @@ namespace Scripts.Input
 {
     public class InputManager : MonoBehaviour
     {
-        private Camera cam;
-        [SerializeField] private LayerMask unitMask;
-        [SerializeField] private LayerMask groundMask;
+        private Camera _cam;
+        [SerializeField] private LayerMask _unitMask;
+        [SerializeField] private LayerMask _groundMask;
+        [SerializeField] private LayerMask _targetMask;
 
         private Unit _selectedUnit;
 
         void Awake()
         {
-            cam = Camera.main;
+            _cam = Camera.main;
         }
 
         void Update()
         {
             if (!UnityEngine.Input.GetMouseButtonDown(0)) return;
 
-            Ray ray = cam.ScreenPointToRay(UnityEngine.Input.mousePosition);
+            Ray ray = _cam.ScreenPointToRay(UnityEngine.Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit, 500f, unitMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, 500f, _unitMask))
             {
                 var unit = hit.collider.GetComponentInParent<Unit>();
                 if (unit != null)
@@ -34,7 +35,18 @@ namespace Scripts.Input
 
             if (_selectedUnit != null)
             {
-                if (Physics.Raycast(ray, out RaycastHit groundHit, 500f, groundMask))
+
+                if (Physics.Raycast(ray, out RaycastHit hitTarget, 500f, _targetMask))
+                {
+                    var target = hitTarget.collider.GetComponentInParent<CombatObject>();
+                    if (target != null && target != _selectedUnit)
+                    {     
+                        _selectedUnit.SetTarget(target);
+                        return;
+                    }
+                }
+
+                if (Physics.Raycast(ray, out RaycastHit groundHit, 500f, _groundMask))
                 {
                     _selectedUnit.MoveTo(groundHit.point);
                 }

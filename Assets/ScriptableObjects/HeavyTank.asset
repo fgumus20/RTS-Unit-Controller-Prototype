@@ -16,5 +16,6 @@ MonoBehaviour:
   moveSpeed: 4
   rotationSpeed: 5
   attackDamage: 20
-  attackRange: 30
+  attackRange: 8
   fireRate: 1.5
+  bulletSpeed: 15
