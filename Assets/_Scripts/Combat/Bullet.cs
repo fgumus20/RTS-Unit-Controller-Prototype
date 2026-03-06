@@ -10,8 +10,9 @@ namespace Scripts.Combat
         private int _damage;
         private float _speed;
         private bool _isActive;
+        private System.Action<Bullet> _onReturnToPool;
 
-        public void Initialize(Vector3 startPos, CombatObject target, int damage, float speed)
+        public void Initialize(Vector3 startPos, CombatObject target, int damage, float speed, System.Action<Bullet> onReturn)
         {
             transform.position = startPos;
             _targetObject = target;
@@ -19,6 +20,7 @@ namespace Scripts.Combat
             _damage = damage;
             _speed = speed;
             _isActive = true;
+            _onReturnToPool = onReturn;
         }
 
         private void Update()
@@ -56,7 +58,7 @@ namespace Scripts.Combat
         {
             _isActive = false;
             _targetObject = null;
-            BulletPool.Instance.Return(this);
+            _onReturnToPool?.Invoke(this);
         }
     }
 }

@@ -142,7 +142,8 @@ namespace Scripts.Core
             Vector3 spawnPos = _projectileSpawnPoint.position;
 
             Bullet bullet = BulletPool.Instance.GetBullet();
-            bullet.Initialize(spawnPos, _currentTarget, _unitData.attackDamage, _unitData.bulletSpeed);
+            bullet.Initialize(spawnPos, _currentTarget, _unitData.attackDamage,
+            _unitData.bulletSpeed, BulletPool.Instance.Return);
         }
 
         private void MoveTowardsPosition(Vector3 targetPosition)
