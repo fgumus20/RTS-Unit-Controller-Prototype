@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Scripts.Combat;
 
-namespace Scripts.Util
+namespace Scripts.Combat
 {
     public class BulletPool : MonoBehaviour
     {

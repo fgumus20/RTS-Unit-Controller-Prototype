@@ -1,7 +1,6 @@
 using UnityEngine;
 using Scripts.Data;
 using Scripts.Combat;
-using Scripts.Util;
 
 namespace Scripts.Core
 

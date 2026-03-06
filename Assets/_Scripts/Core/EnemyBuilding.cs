@@ -7,12 +7,13 @@ namespace Scripts.Core
         [SerializeField] private int _maxHealth = 500;
 
         protected override int GetMaxHealth() => _maxHealth;
+        [SerializeField] private MeshRenderer _renderer;
+        [SerializeField] private Material _deadMaterial;
 
         protected override void Die()
         {
             base.Die();
-
-            // effect will added
+            _renderer.material = _deadMaterial;
         }
     }
 }

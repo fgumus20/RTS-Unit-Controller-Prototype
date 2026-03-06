@@ -11,10 +11,6 @@ namespace Scripts.Core
 
         protected int currentHealth;
         protected int maxHealth;
-
-        public int MaxHealth => maxHealth;
-
-
         public bool IsDead => currentHealth <= 0;
 
         protected virtual void Start()
